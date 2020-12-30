@@ -123,3 +123,5 @@ nuget/tools/*
 # Unity
 Library/
 Temp/
+
+settings.json
