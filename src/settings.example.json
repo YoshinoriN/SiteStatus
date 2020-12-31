@@ -1,3 +1,15 @@
 {
-  //TODO
+  "domains": [
+    "example.com",
+    "sub.example.com"
+  ],
+  "storageType": "local",
+  "output": {
+    "secondLevelDomain": {
+      "destination": "./second-level-domains.json"
+    },
+    "certifications": {
+      "destination": "./certifications.json"
+    }
+  },
 }
