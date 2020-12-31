@@ -10,7 +10,7 @@ namespace SiteStatus.Tests
         {
             var content = SiteStatus.utils.File.ReadFile(Path.Join(Directory.GetCurrentDirectory(), "settings.example.json"));
             Assert.StartsWith("{", content);
-        }
+        } 
 
         [Fact]
         public void ThrowFileNotFoundExceptionTest()
