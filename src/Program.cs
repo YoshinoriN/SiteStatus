@@ -40,7 +40,7 @@ namespace SiteStatus
                 ServerCertificate result = null;
                 try
                 {
-                    result = SiteStatus.Utils.HttpClient.GetServerCertificate(new Uri(domain))
+                    result = SiteStatus.Utils.HttpClient.GetServerCertificate(new Uri("https://" + domain))
                         .GetAwaiter()
                         .GetResult();
                 }

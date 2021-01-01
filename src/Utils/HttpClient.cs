@@ -48,7 +48,6 @@ namespace SiteStatus.Utils
         {
             // TODO: fix
             _tmpResponseResult = null;
-            // TODO: http support
             await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri));
             return _tmpResponseResult;
         }

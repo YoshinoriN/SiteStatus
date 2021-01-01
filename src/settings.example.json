@@ -1,8 +1,7 @@
 {
   "domains": [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://example.com/"
+    "example.com",
+    "sub.example.com"
   ],
   "storageType": "local",
   "output": {

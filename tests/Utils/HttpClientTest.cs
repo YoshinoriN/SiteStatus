@@ -28,13 +28,5 @@ namespace SiteStatus.Tests
                 .GetResult();
             });
         }
-
-        /*
-        public void HttpResponseTest()
-        {
-            // TODO: What should I do?
-            // Support http? or not support?
-        }
-        */
     }
 }
