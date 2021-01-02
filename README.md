@@ -6,14 +6,31 @@ Create whois(SLD only) & serverside certificate status to JSON. And store it to 
 
 # Requirements
 
-* .NET Core 5.0
+* .NET 5.0
 
 # Usage
 
-* Write configuration
-* Execute `SiteStatus.ext`
+#### 1. Setup .NET 5
 
-# Configuration
+download & install [dotnet 5](https://dotnet.microsoft.com/download/dotnet/5.0).
+
+#### 2. Download source code
+
+Download [source code](https://github.com/YoshinoriN/SiteStatus/releases).
+
+#### 3. Build
+
+```sh
+// for your platform
+$ dotnet build src/SiteStatus.csproj --configuration Release
+
+// for Linux
+$ dotnet build src/SiteStatus.csproj --runtime linux-x64 --configuration Release
+```
+
+Please [see more detail](https://docs.microsoft.com/dotnet/core/tools/dotnet-build) if you want.
+
+#### 4. Write configuration
 
 Put `settings.json` in the directory where` SiteStatus.exe` exists.
 
@@ -43,7 +60,7 @@ Put `settings.json` in the directory where` SiteStatus.exe` exists.
 }
 ```
 
-## S3 config example
+##### S3 config example
 
 Currently, can not set `region`, `profile` from `settings.json`. The program uses the default user's profile.
 
@@ -108,13 +125,6 @@ Certificate result (JSON) will put onto `bucket.example.com/sites/certifications
   },
   ...
 ]
-```
-
-# Build
-
-```cmd
-// for Linux
-dotnet build src/SiteStatus.csproj --runtime linux-x64 --configuration Release
 ```
 
 # Using Libraries
