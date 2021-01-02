@@ -40,8 +40,9 @@ namespace SiteStatus.Utils
                     return sslErrors == SslPolicyErrors.None;
                 }
             };
-            // TODO: set timeout
             _httpClient = new System.Net.Http.HttpClient(handler);
+            // TODO: from settings
+            _httpClient.Timeout = TimeSpan.FromSeconds(60);
         }
 
         public static async Task<ServerCertificate> GetServerCertificate(Uri uri)
