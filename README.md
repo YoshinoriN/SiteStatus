@@ -15,7 +15,7 @@ Batch application for check & validate domains.
 
 Put `settings.json` in the directory where` SiteStatus.exe` exists.
 
-```
+```json
 {
   // set domains you want to check.
   "domains": [
@@ -47,7 +47,7 @@ Currently, can not set `region`, `profile` from `settings.json`. The program use
 
 Certificate result (JSON) will put onto `bucket.example.com/sites/certifications.json` as below.
 
-```
+```json
 {
   "domains": [
     "example.com",
