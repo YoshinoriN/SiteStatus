@@ -110,6 +110,13 @@ Certificate result (JSON) will put onto `bucket.example.com/sites/certifications
 ]
 ```
 
+# Build
+
+```cmd
+// for Linux
+dotnet build src/SiteStatus.csproj --runtime linux-x64 --configuration Release
+```
+
 # Using Libraries
 
 ||LICENSE|
