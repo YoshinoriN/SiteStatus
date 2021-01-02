@@ -80,7 +80,15 @@ namespace SiteStatus
             var certificateRepository = new CertificateRepository(certificateStorage);
             var certificateService = new CertificateService(certificateRepository);
 
-            certificateService.Put(certificates);
+            try
+            {
+                certificateService.Put(certificates);
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
             // TODO: put result to storage
         }
     }

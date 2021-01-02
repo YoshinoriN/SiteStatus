@@ -23,6 +23,15 @@ namespace SiteStatus.Domains.Settings
         public Certifications Certifications { get; set; }
     }
 
+    public class S3
+    {
+        [JsonPropertyName("bucketName")]
+        public string BucketName { get; set; }
+
+        [JsonPropertyName("isPublicRead")]
+        public string IsPublicRead { get; set; }
+    }
+
     public class Settings
     {
         [JsonPropertyName("domains")]
@@ -33,5 +42,8 @@ namespace SiteStatus.Domains.Settings
 
         [JsonPropertyName("output")]
         public OutPut OutPut { get; set; }
+
+        [JsonPropertyName("s3")]
+        public S3 S3 { get; set; }
     }
 }

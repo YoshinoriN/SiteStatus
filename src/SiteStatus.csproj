@@ -4,7 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <None Update="settings.example.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -14,8 +13,8 @@
     </None>
   </ItemGroup>
 
-
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.5.7.4" />
     <PackageReference Include="Whois" Version="2.0.2" />
   </ItemGroup>
 
