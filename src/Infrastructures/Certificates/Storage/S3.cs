@@ -1,4 +1,4 @@
-﻿                                                                                                  using System;
+﻿using System;
 using SiteStatus.Infrastructures.Storage;
 
 namespace SiteStatus.Infrastructures.Certificates.Storage
@@ -10,7 +10,7 @@ namespace SiteStatus.Infrastructures.Certificates.Storage
             // TODO: set settings
         }
 
-        public void Put(string path)
+        public void Put(string json)
         {
             // TODO: impl
             throw new NotImplementedException();
