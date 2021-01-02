@@ -9,6 +9,7 @@ using SiteStatus.Domains.Certificates;
 using SiteStatus.Infrastructures.Whois.Storage;
 using SiteStatus.Infrastructures.Whois;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SiteStatus
 {
@@ -32,32 +33,38 @@ namespace SiteStatus
                 })
                 .Distinct();
 
-            var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
-            var whoisRepository = new WhoisRepository(whoisStorage);
-            var whoisService = new WhoisService(whoisRepository);
+            ParallelOptions parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = 4;  // TODO: option
 
-            var certificateStorage = CertificateStorageFactory.CreateCertificateStorage(settings);
-            var certificateRepository = new CertificateRepository(certificateStorage);
-            var certificateService = new CertificateService(certificateRepository);
-
-            List<Certificate> certificates = new List<Certificate>();
-            List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
-
-            // TODO: exec parallelly
-            foreach (string sld in slds)
+            try
             {
-                whoisInfos.Add(whoisService.Lookup(sld));
+                var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
+                var whoisRepository = new WhoisRepository(whoisStorage);
+                var whoisService = new WhoisService(whoisRepository);
+
+                List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
+                Parallel.ForEach(slds, parallelOptions, sld =>
+                {
+                    whoisInfos.Add(whoisService.Lookup(sld));
+                });
+                whoisService.Put(whoisInfos);
             }
-
-            // TODO: exec parallelly
-            foreach (string domain in domains)
+            catch (Exception ex)
             {
-                certificates.Add(certificateService.GetServerCertificate(domain));
+                Console.WriteLine(ex.Message);
             }
 
             try
             {
-                whoisService.Put(whoisInfos);
+                var certificateStorage = CertificateStorageFactory.CreateCertificateStorage(settings);
+                var certificateRepository = new CertificateRepository(certificateStorage);
+                var certificateService = new CertificateService(certificateRepository);
+
+                List<Certificate> certificates = new List<Certificate>();
+                Parallel.ForEach(domains, parallelOptions, domain =>
+                {
+                    certificates.Add(certificateService.GetServerCertificate(domain));
+                });
                 certificateService.Put(certificates);
             } 
             catch (Exception ex)
