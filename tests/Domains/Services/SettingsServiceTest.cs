@@ -18,7 +18,7 @@ namespace SiteStatus.Tests.Domains.Services
             Assert.Equal("example.com", settings.Domains[0]);
             Assert.Equal("sub.example.com", settings.Domains[1]);
             Assert.Equal("./certifications.json", settings.OutPut.Certifications.Destination);
-            Assert.Equal("./second-level-domains.json", settings.OutPut.SecondLevelDomain.Destination);
+            Assert.Equal("./second-level-domains.json", settings.OutPut.Whois.Destination);
         }
     }
 }
