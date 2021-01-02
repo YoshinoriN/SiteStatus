@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using SiteStatus.Domains.Whois;
+using Whois.Models;
 
 namespace SiteStatus.Domains.Services
 {
@@ -40,6 +42,44 @@ namespace SiteStatus.Domains.Services
         {
             var json = this.Serialize(whois);
             this._whoisRepository.Put(json);
+        }
+
+        /// <summary>
+        /// Whois lookup
+        /// </summary>
+        /// <param name="sld">second level domain</param>
+        /// <returns></returns>
+        public Domains.Whois.Whois Lookup(string sld)
+        {
+            try
+            {
+                WhoisResponse whoisResult = null;
+                whoisResult = SiteStatus.Utils.Whois.Lookup(sld)
+                    .GetAwaiter()
+                    .GetResult();
+
+                if (whoisResult.ParsedResponse == null)
+                {
+                    throw new Exception("Can not resolve host");
+                }
+
+                var json = JsonSerializer.Serialize(whoisResult.ParsedResponse);
+                var w = JsonSerializer.Deserialize<Domains.Whois.Whois>(json);
+                w.Status = "success";
+                w.CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                return w;
+            }
+            catch (Exception ex)
+            {
+                // TODO: logging
+                Console.WriteLine(ex.Message);
+                return new Domains.Whois.Whois
+                {
+                    DomainName = sld,
+                    Status = "error",
+                    CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
+                };
+            }
         }
     }
 }

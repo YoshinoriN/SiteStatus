@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Net.Security;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using SiteStatus.Domains.Certificates;
@@ -40,6 +42,46 @@ namespace SiteStatus.Domains.Services
         {
             var json = this.Serialize(certificates);
             this._certificateRepository.Put(json);
+        }
+
+        /// <summary>
+        /// Get server certificate
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public Certificate GetServerCertificate(string domain)
+        {
+            try
+            {
+                var result = SiteStatus.Utils.HttpClient.GetServerCertificate(new Uri("https://" + domain))
+                    .GetAwaiter()
+                    .GetResult();
+
+                return new Certificate
+                {
+                    Domain = domain,
+                    Status = result != null ? (result.SslErrors == SslPolicyErrors.None ? "success" : "error") : "error",
+                    Issuer = result != null ? result.Certificate.Issuer : "N/A",
+                    // NOTE: timezone
+                    ValidFrom = result != null ? ((DateTimeOffset)result.Certificate.NotBefore).ToUnixTimeSeconds() : null,
+                    ValidTo = result != null ? ((DateTimeOffset)result.Certificate.NotAfter).ToUnixTimeSeconds() : null,
+                    CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
+                };
+            }
+            catch (Exception ex)
+            {
+                // TODO: logging
+                Console.WriteLine(ex.Message);
+                return new Certificate
+                {
+                    Domain = domain,
+                    Status = "error",
+                    Issuer = "N/A",
+                    ValidFrom = null,
+                    ValidTo = null,
+                    CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
+                };
+            }
         }
     }
 }
