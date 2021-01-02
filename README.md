@@ -1,4 +1,4 @@
-# [WIP]: SiteStatus
+# SiteStatus
 
 Batch application for check & validate domains.
 

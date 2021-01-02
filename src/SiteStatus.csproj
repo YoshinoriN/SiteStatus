@@ -1,8 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <Copyright>YoshinoriN</Copyright>
+    <PackageProjectUrl>https://github.com/YoshinoriN/SiteStatus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/YoshinoriN/SiteStatus</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <None Update="settings.example.json">
@@ -17,5 +25,9 @@
     <PackageReference Include="AWSSDK.S3" Version="3.5.7.4" />
     <PackageReference Include="Whois" Version="2.0.2" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="del bin\Release\net5.0\settings.json&#xD;&#xA;del bin\Release\net5.0\SiteStatus.pdb&#xD;&#xA;del bin\Release\net5.0\SiteStatus.runtimeconfig.dev.json&#xD;&#xA;del bin\Release\net5.0\SiteStatus.deps.json&#xD;&#xA;&#xD;&#xA;copy ..\README.md bin\Release\net5.0\README.md&#xD;&#xA;copy ..\LICENSE bin\Release\net5.0\LICENSE&#xD;&#xA;" />
+  </Target>
 
 </Project>
