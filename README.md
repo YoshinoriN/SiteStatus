@@ -2,6 +2,8 @@
 
 Batch application for check & validate domains.
 
+Create whois(SLD only) & serverside certificate status to JSON. And store it to local storage or AWS S3.
+
 # Requirements
 
 * .NET Core 5.0
@@ -67,4 +69,43 @@ Certificate result (JSON) will put onto `bucket.example.com/sites/certifications
     "isPublicRead": "true"
   }
 }
+```
+
+# Example of result
+
+```json
+// certificate
+[
+  {
+    "domain":"yoshinorin.net",
+    "status":"success",
+    "issuer":"CN=R3, O=Let's Encrypt, C=US",
+    "validFrom":1609238175,
+    "validTo":1617014175,
+    "checkedAt":1609590374
+  },
+  ...
+]
+
+// whois (SLD only)
+[
+  {
+    "DomainName":"yoshinorin.net",
+    "status":"success",
+    "Registered":"1463150894",
+    "Updated":"1512391744",
+    "Expiration":"1810219694",
+    "Registrar":{
+      "Name":"Amazon Registrar, Inc."
+    },
+    "NameServers":[
+      "ns-1080.awsdns-07.org",
+      "ns-1584.awsdns-06.co.uk",
+      "ns-503.awsdns-62.com",
+      "ns-588.awsdns-09.net"
+    ],
+    "CheckedAt":1609590371
+  },
+  ...
+]
 ```
