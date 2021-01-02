@@ -109,3 +109,12 @@ Certificate result (JSON) will put onto `bucket.example.com/sites/certifications
   ...
 ]
 ```
+
+# Using Libraries
+
+||LICENSE|
+|---|---|
+|[AWS SDK .NET](https://github.com/aws/aws-sdk-net)|[Apache License, Version 2.0](https://github.com/aws/aws-sdk-net/blob/master/License.txt)|
+|[Whois](https://github.com/flipbit/whois)|[MIT](https://www.nuget.org/packages/Whois/2.0.2/License)|
+|[xUnit](https://github.com/xunit/xunit)|[Apache License, Version 2.0](https://github.com/xunit/xunit/blob/main/LICENSE)|
+
