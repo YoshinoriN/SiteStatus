@@ -1,6 +1,5 @@
 ﻿using SiteStatus.Domains.Settings;
 
-
 namespace SiteStatus.Infrastructures.Settings
 {
     public class SettingsRepository : ISettingsRepository

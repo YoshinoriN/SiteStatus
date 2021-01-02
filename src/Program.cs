@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using SiteStatus.Domains.Services;
 using SiteStatus.Infrastructures.Settings;

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using SiteStatus.Domains.Services;
 using SiteStatus.Infrastructures.Settings;
 using SiteStatus.Infrastructures.Certificates.Storage;

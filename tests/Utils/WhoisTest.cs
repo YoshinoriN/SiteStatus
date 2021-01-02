@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Xunit;
 
 namespace SiteStatus.Tests.Utils
@@ -15,7 +15,6 @@ namespace SiteStatus.Tests.Utils
             Assert.StartsWith("{", prsedResponse);
             Assert.EndsWith("}", prsedResponse);
             Assert.Contains("DomainName", prsedResponse);
-
         }
     }
 }
