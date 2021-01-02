@@ -26,8 +26,4 @@
     <PackageReference Include="Whois" Version="2.0.2" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del bin\Release\net5.0\settings.json&#xD;&#xA;del bin\Release\net5.0\SiteStatus.pdb&#xD;&#xA;del bin\Release\net5.0\SiteStatus.runtimeconfig.dev.json&#xD;&#xA;del bin\Release\net5.0\SiteStatus.deps.json&#xD;&#xA;&#xD;&#xA;copy ..\README.md bin\Release\net5.0\README.md&#xD;&#xA;copy ..\LICENSE bin\Release\net5.0\LICENSE&#xD;&#xA;" />
-  </Target>
-
 </Project>
