@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using SiteStatus.Domains.Services;
 using SiteStatus.Infrastructures.Settings;
@@ -9,7 +9,10 @@ using System.Collections.Generic;
 using SiteStatus.Infrastructures.Certificates;
 using SiteStatus.Infrastructures.Certificates.Storage;
 using SiteStatus.Domains.Certificates;
+using SiteStatus.Domains.Whois;
 using System.Net.Security;
+using SiteStatus.Infrastructures.Whois.Storage;
+using SiteStatus.Infrastructures.Whois;
 
 namespace SiteStatus
 {
@@ -23,25 +26,42 @@ namespace SiteStatus
 
             // TODO: impl validation
 
-            // TODO: exec parallelly
             List<Certificate> certificates = new List<Certificate>();
+            List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
+
+            // TODO: exec parallelly
             foreach (string domain in settings.Domains)
             {
-                WhoisResponse whoisResult = null;
                 try
                 {
+                    WhoisResponse whoisResult = null;
                     whoisResult = SiteStatus.Utils.Whois.Lookup(domain)
                         .GetAwaiter()
                         .GetResult();
+
+                    if (whoisResult.ParsedResponse == null)
+                    {
+                        throw new Exception("Can not resolve host");
+                    }
+
+                    var json = JsonSerializer.Serialize(whoisResult.ParsedResponse);
+                    var w = JsonSerializer.Deserialize<Domains.Whois.Whois>(json);
+                    w.Status = "success";
+                    w.CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    whoisInfos.Add(w);
                 }
                 catch (Exception ex)
                 {
                     // TODO: logging
                     Console.WriteLine(ex.Message);
-                    continue;
+                    whoisInfos.Add(new Domains.Whois.Whois
+                    {
+                        DomainName = domain,
+                        Status = "error",
+                        CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
+                    });
                 }
-                Console.WriteLine(JsonSerializer.Serialize(whoisResult.ParsedResponse));
-
+                
                 try
                 {
                     ServerCertificate result = null;
@@ -75,6 +95,9 @@ namespace SiteStatus
                     });
                 }
             }
+            var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
+            var whoisRepository = new WhoisRepository(whoisStorage);
+            var whoisService = new WhoisService(whoisRepository);
 
             var certificateStorage = CertificateStorageFactory.CreateCertificateStorage(settings);
             var certificateRepository = new CertificateRepository(certificateStorage);
@@ -82,6 +105,7 @@ namespace SiteStatus
 
             try
             {
+                whoisService.Put(whoisInfos);
                 certificateService.Put(certificates);
             } 
             catch (Exception ex)

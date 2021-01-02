@@ -25,9 +25,9 @@ Put `settings.json` in the directory where` SiteStatus.exe` exists.
   // local or s3
   "storageType": "local",
   "output": {
-    "secondLevelDomain": {
+    "whois": {
       // please DO NOT WRITE relative path if storageType is s3
-      "destination": "./second-level-domains.json"
+      "destination": "./whois.json"
     },
     "certifications": {
       // please DO NOT WRITE relative path if storageType is s3
@@ -55,8 +55,8 @@ Certificate result (JSON) will put onto `bucket.example.com/sites/certifications
   ],
   "storageType": "s3",
   "output": {
-    "secondLevelDomain": {
-      "destination": "sites/second-level-domains.json"
+    "whois": {
+      "destination": "sites/whois.json"
     },
     "certifications": {
       "destination": "sites/certifications.json"

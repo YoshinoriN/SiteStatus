@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SiteStatus.Domains.Settings
 {
-    public class SecondLevelDomain
+    public class Whois
     {
         [JsonPropertyName("destination")]
         public string Destination { get; set; }
@@ -16,8 +16,8 @@ namespace SiteStatus.Domains.Settings
     }
     public class OutPut
     {
-        [JsonPropertyName("secondLevelDomain")]
-        public SecondLevelDomain SecondLevelDomain { get; set; }
+        [JsonPropertyName("whois")]
+        public Whois Whois { get; set; }
 
         [JsonPropertyName("certifications")]
         public Certifications Certifications { get; set; }

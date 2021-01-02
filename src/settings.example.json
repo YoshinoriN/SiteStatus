@@ -5,8 +5,8 @@
   ],
   "storageType": "local",
   "output": {
-    "secondLevelDomain": {
-      "destination": "./second-level-domains.json"
+    "whois": {
+      "destination": "./whois.json"
     },
     "certifications": {
       "destination": "./certifications.json"
