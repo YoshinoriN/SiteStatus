@@ -13,6 +13,7 @@ using SiteStatus.Domains.Whois;
 using System.Net.Security;
 using SiteStatus.Infrastructures.Whois.Storage;
 using SiteStatus.Infrastructures.Whois;
+using System.Linq;
 
 namespace SiteStatus
 {
@@ -29,13 +30,23 @@ namespace SiteStatus
             List<Certificate> certificates = new List<Certificate>();
             List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
 
+            var domains = settings.Domains.Distinct();
+            var slds = domains
+                .Where(d => d.Contains("."))
+                .Select(d =>
+                {
+                    var x = d.Split(".").Reverse().ToArray();
+                    return string.Join(".", x[1], x[0]);
+                })
+                .Distinct();
+
             // TODO: exec parallelly
-            foreach (string domain in settings.Domains)
+            foreach (string sld in slds)
             {
                 try
                 {
                     WhoisResponse whoisResult = null;
-                    whoisResult = SiteStatus.Utils.Whois.Lookup(domain)
+                    whoisResult = SiteStatus.Utils.Whois.Lookup(sld)
                         .GetAwaiter()
                         .GetResult();
 
@@ -56,12 +67,16 @@ namespace SiteStatus
                     Console.WriteLine(ex.Message);
                     whoisInfos.Add(new Domains.Whois.Whois
                     {
-                        DomainName = domain,
+                        DomainName = sld,
                         Status = "error",
                         CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
                     });
                 }
-                
+            }
+
+            // TODO: exec parallelly
+            foreach (string domain in domains)
+            {
                 try
                 {
                     ServerCertificate result = null;
@@ -95,6 +110,7 @@ namespace SiteStatus
                     });
                 }
             }
+
             var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
             var whoisRepository = new WhoisRepository(whoisStorage);
             var whoisService = new WhoisService(whoisRepository);
@@ -112,8 +128,6 @@ namespace SiteStatus
             {
                 Console.WriteLine(ex.Message);
             }
-            
-            // TODO: put result to storage
         }
     }
 }
