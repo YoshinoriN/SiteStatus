@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace SiteStatus.Domains.Whois
@@ -9,6 +9,7 @@ namespace SiteStatus.Domains.Whois
         public string DomainName { get; set; }
     }
 
+    // TODO: lowerCamelCase
     public class Whois
     {
         [JsonPropertyName("DomainName")]
