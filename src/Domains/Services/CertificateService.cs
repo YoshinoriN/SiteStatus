@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using SiteStatus.Domains.Certificates;
 
@@ -24,7 +25,11 @@ namespace SiteStatus.Domains.Services
         /// <returns>JSON string</returns>
         public string Serialize(List<Domains.Certificates.Certificate> certificates)
         {
-            return JsonSerializer.Serialize(certificates);
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            return JsonSerializer.Serialize(certificates, options);
         }
 
         /// <summary>

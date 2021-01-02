@@ -18,7 +18,7 @@ namespace SiteStatus.Infrastructures.Certificates.Storage
             var filePath = Path.Join(Directory.GetCurrentDirectory(), this._settings.OutPut.Certifications.Destination);
             using (StreamWriter streamWriter = new StreamWriter(filePath))
             {
-                streamWriter.Write(JsonSerializer.Serialize(json));
+                streamWriter.Write(json);
             }
         }
     }
