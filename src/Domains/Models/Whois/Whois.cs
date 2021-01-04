@@ -5,21 +5,20 @@ namespace SiteStatus.Domains.Whois
 {
     public class Registrar
     {
-        [JsonPropertyName("Name")]
-        public string DomainName { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
     }
 
-    // TODO: lowerCamelCase
     public class Whois
     {
-        [JsonPropertyName("DomainName")]
+        [JsonPropertyName("domainName")]
         public string DomainName { get; set; }
 
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
         private string? _registerd = null;
-        [JsonPropertyName("Registered")]
+        [JsonPropertyName("registered")]
         public string? Registered
         {
             get
@@ -33,7 +32,7 @@ namespace SiteStatus.Domains.Whois
         }
 
         private string? _updated = null;
-        [JsonPropertyName("Updated")]
+        [JsonPropertyName("updated")]
         public string? Updated
         {
             get
@@ -47,7 +46,7 @@ namespace SiteStatus.Domains.Whois
         }
 
         private string? _expiration = null;
-        [JsonPropertyName("Expiration")]
+        [JsonPropertyName("expiration")]
         public string? Expiration
         {
             get
@@ -60,13 +59,13 @@ namespace SiteStatus.Domains.Whois
             }
         }
 
-        [JsonPropertyName("Registrar")]
+        [JsonPropertyName("registrar")]
         public Registrar Registrar { get; set; }
 
-        [JsonPropertyName("NameServers")]
+        [JsonPropertyName("nameServers")]
         public string[] NameServers { get; set; }
 
-        [JsonPropertyName("CheckedAt")]
+        [JsonPropertyName("checkedAt")]
         public long CheckedAt { get; set; }
     }
 

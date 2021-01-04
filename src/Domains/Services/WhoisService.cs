@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -63,8 +63,13 @@ namespace SiteStatus.Domains.Services
                     throw new Exception("Can not resolve host");
                 }
 
-                var json = JsonSerializer.Serialize(whoisResult.ParsedResponse);
-                var w = JsonSerializer.Deserialize<Domains.Whois.Whois>(json);
+                var options = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    PropertyNameCaseInsensitive = true
+                };
+                var json = JsonSerializer.Serialize(whoisResult.ParsedResponse, options);
+                var w = JsonSerializer.Deserialize<Domains.Whois.Whois>(json, options);
                 w.Status = "success";
                 w.CheckedAt = DateTimeOffset.Now.ToUnixTimeSeconds();
                 return w;
