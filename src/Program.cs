@@ -34,9 +34,6 @@ namespace SiteStatus
                 })
                 .Distinct();
 
-            ParallelOptions parallelOptions = new ParallelOptions();
-            parallelOptions.MaxDegreeOfParallelism = 4;  // TODO: option
-
             try
             {
                 var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
@@ -57,13 +54,10 @@ namespace SiteStatus
                 var certificateStorage = CertificateStorageFactory.CreateCertificateStorage(settings);
                 var certificateRepository = new CertificateRepository(certificateStorage);
                 var certificateService = new CertificateService(certificateRepository);
+                var certificateApplicationService = new CertificateApplicationService(certificateService);
 
-                List<Certificate> certificates = new List<Certificate>();
-                Parallel.ForEach(domains, parallelOptions, domain =>
-                {
-                    certificates.Add(certificateService.GetServerCertificate(domain));
-                });
-                certificateService.Put(certificates);
+                var certificates = certificateApplicationService.GetServerCertificateParallelly(domains);
+                certificateApplicationService.Put(certificates);
             } 
             catch (Exception ex)
             {
