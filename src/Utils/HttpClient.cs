@@ -18,6 +18,8 @@ namespace SiteStatus.Utils
             this.SslErrors = sslErrors;
         }
     }
+
+    // TODO: Should I move this to ServiceClass??
     public static class HttpClient
     {
         private static readonly System.Net.Http.HttpClient _httpClient;
@@ -40,6 +42,9 @@ namespace SiteStatus.Utils
                     return sslErrors == SslPolicyErrors.None;
                 }
             };
+            // HttpClient Instance should be singleton.
+            // But, server certificate infos have to store somewhere.
+            // It can be accessed only in the callback func.
             _httpClient = new System.Net.Http.HttpClient(handler);
             // TODO: from settings
             _httpClient.Timeout = TimeSpan.FromSeconds(60);
