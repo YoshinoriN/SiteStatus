@@ -10,6 +10,7 @@ using SiteStatus.Infrastructures.Whois.Storage;
 using SiteStatus.Infrastructures.Whois;
 using System.Linq;
 using System.Threading.Tasks;
+using SiteStatus.Applications;
 
 namespace SiteStatus
 {
@@ -41,13 +42,10 @@ namespace SiteStatus
                 var whoisStorage = WhoisStorageFactory.CreateWhoisStorage(settings);
                 var whoisRepository = new WhoisRepository(whoisStorage);
                 var whoisService = new WhoisService(whoisRepository);
+                var whoisApplicationService = new WhoisApplicationService(whoisService);
 
-                List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
-                Parallel.ForEach(slds, parallelOptions, sld =>
-                {
-                    whoisInfos.Add(whoisService.Lookup(sld));
-                });
-                whoisService.Put(whoisInfos);
+                var whoisInfos = whoisApplicationService.LookupParallelly(slds);
+                whoisApplicationService.Put(whoisInfos);
             }
             catch (Exception ex)
             {
