@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -69,12 +71,12 @@ namespace SiteStatus.Applications
         /// <returns></returns>
         public List<SiteStatus.Domains.Whois.Whois> LookupParallelly(IEnumerable<string> slds)
         {
-            List<SiteStatus.Domains.Whois.Whois> whoisInfos = new List<SiteStatus.Domains.Whois.Whois>();
+            ConcurrentQueue<SiteStatus.Domains.Whois.Whois> whoisInfos = new ConcurrentQueue<SiteStatus.Domains.Whois.Whois>();
             Parallel.ForEach(slds, parallelOptions, sld =>
             {
-                whoisInfos.Add(this.Lookup(sld));
+                whoisInfos.Enqueue(this.Lookup(sld));
             });
-            return whoisInfos;
+            return whoisInfos.ToList();
         }
 
         /// <summary>

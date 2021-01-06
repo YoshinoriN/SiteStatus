@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,12 +27,12 @@ namespace SiteStatus.Applications
         /// <returns></returns>
         public List<Certificate> GetServerCertificateParallelly(IEnumerable<string> domains)
         {
-            List<Certificate> certificates = new List<Certificate>();
+            ConcurrentQueue<Certificate> certificates = new ConcurrentQueue<Certificate>();
             Parallel.ForEach(domains, parallelOptions, domain =>
             {
-                certificates.Add(this._certificateService.GetServerCertificate(domain));
+                certificates.Enqueue(this._certificateService.GetServerCertificate(domain));
             });
-            return certificates;
+            return certificates.ToList();
         }
 
         /// <summary>
