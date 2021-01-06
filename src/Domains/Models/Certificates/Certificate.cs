@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace SiteStatus.Domains.Certificates
 {
@@ -7,7 +7,6 @@ namespace SiteStatus.Domains.Certificates
         [JsonPropertyName("domain")]
         public string Domain { get; set; }
 
-        // TODO: setterでErrorの場合にN/Aにする
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
