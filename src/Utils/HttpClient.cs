@@ -22,13 +22,10 @@ namespace SiteStatus.Utils
     // TODO: Should I move this to ServiceClass??
     public static class HttpClient
     {
-        private static readonly System.Net.Http.HttpClient _httpClient;
-
-        // TODO: fix
-        private static ServerCertificate _tmpResponseResult = null;
-
-        static HttpClient()
+        public static async Task<ServerCertificate> GetServerCertificate(Uri uri)
         {
+            ServerCertificate _tmpResponseResult = null;
+
             var handler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (
@@ -37,24 +34,18 @@ namespace SiteStatus.Utils
                     X509Chain chain,
                     SslPolicyErrors sslErrors) =>
                 {
-                    // TODO: fix
                     _tmpResponseResult = new ServerCertificate(new X509Certificate2(certificate), sslErrors);
                     return sslErrors == SslPolicyErrors.None;
                 }
             };
-            // HttpClient Instance should be singleton.
-            // But, server certificate infos have to store somewhere.
-            // It can be accessed only in the callback func.
-            _httpClient = new System.Net.Http.HttpClient(handler);
-            // TODO: from settings
-            _httpClient.Timeout = TimeSpan.FromSeconds(60);
-        }
 
-        public static async Task<ServerCertificate> GetServerCertificate(Uri uri)
-        {
-            // TODO: fix
-            _tmpResponseResult = null;
-            await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri));
+            // TODO: avoid using
+            using (var httpClient = new System.Net.Http.HttpClient(handler))
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(60);
+                _tmpResponseResult = null;
+                await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri));
+            }
             return _tmpResponseResult;
         }
 
