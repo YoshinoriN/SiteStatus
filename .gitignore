@@ -125,3 +125,4 @@ Library/
 Temp/
 
 settings.json
+/docker/dist/
